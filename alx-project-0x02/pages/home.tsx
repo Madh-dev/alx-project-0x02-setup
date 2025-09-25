@@ -1,13 +1,41 @@
 import Card from '@/components/common/Card'
-import React from 'react'
+import React, { useState } from 'react'
+import PostModal from '@/components/common/PostModal';
+import Header from '@/components/layout/Header';
+
 
 function Home() {
+  const [posts,setPosts] = useState<{title:string; content:string;}[]>([]);
+  const [isModalOpen,setIsModalOpen] = useState(false);
+
+  const addPost = (title:string,content:string)=>{
+    setPosts([...posts,{title,content}]);
+  }
   return (
-    <div className='p-6 space-y-4'>
-      <h1 className="text-2xl font-semibold">This is the Home Page</h1>
-      <Card title='Card One' content='This is the First card.' />
-      <Card title='Card Two' content='This is the Second card.' />
-    </div>
+     <>
+      <Header />
+      <main className="p-6">
+        <h1 className="text-3xl font-bold mb-4">Home Page 🏠</h1>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="mb-4 px-4 py-2 bg-blue-600 text-white rounded"
+        >
+          Add Post
+        </button>
+
+        <div className="grid gap-4">
+          {posts.map((post, idx) => (
+            <Card key={idx} title={post.title} content={post.content} />
+          ))}
+        </div>
+      </main>
+
+      <PostModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAddPost={addPost}
+      />
+    </>
   )
 }
 
