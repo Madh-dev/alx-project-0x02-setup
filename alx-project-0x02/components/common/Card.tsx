@@ -1,5 +1,5 @@
 import React from 'react'
-import { CardProps } from '@/interfaces'
+import {type CardProps } from '@/interfaces'
 function Card({title,content}:CardProps) {
   return (
     <div className='border rounded-lg p-4 shadow hover:shadow-lg transition'>
