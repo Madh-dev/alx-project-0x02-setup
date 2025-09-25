@@ -3,14 +3,11 @@ import Header from '@/components/layout/Header'
 import { type PostProps } from '@/interfaces'
 import PostCard from '@/components/common/PostCard';
 
-function posts() {
-  const [posts,setPosts] =useState<PostProps[]>([]);
+interface PostsPageProps{
+  posts: PostProps[];
+}
+function Posts({posts}:PostsPageProps) {
 
-  useEffect(()=>{
-    fetch("https://jsonplaceholder.typicode.com/posts?_limit=15")
-    .then((response) => response.json())
-    .then((json) => setPosts(json));
-  },[]);
 
   return (
      <>
@@ -18,14 +15,14 @@ function posts() {
       <main className="p-6">
         <h1 className="text-3xl font-bold">Posts Page 📰</h1>
         <div className='grid gap-4'>
-          {posts.map(posts=>{
+          {posts.map(post=>{
             return(
               <PostCard 
-                title={posts.title}
-                body={posts.body}
-                userId={posts.userId}
-                key={posts.id}
-                id={posts.id} 
+                title={post.title}
+                body={post.body}
+                userId={post.userId}
+                key={post.id}
+                id={post.id} 
                 />
             )
           })}
@@ -35,4 +32,18 @@ function posts() {
   )
 }
 
-export default posts
+export default Posts
+
+
+export async function getStaticProps() {
+  const res = await fetch(
+    "https://jsonplaceholder.typicode.com/posts?_limit=15"
+  );
+  const posts: PostProps[] = await res.json();
+  
+  return{
+    props:{
+      posts,
+    },
+  };
+}
